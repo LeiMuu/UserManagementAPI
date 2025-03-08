@@ -1,0 +1,5 @@
+UserManagementAPI/logs/
+UserManagementAPI/bin/
+UserManagementAPI/obj/
+.vs
+.github

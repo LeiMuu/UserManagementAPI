@@ -1,0 +1,128 @@
+﻿@WebApplication1_HostAddress = https://localhost:44395
+
+# Get JWT Token
+POST {{WebApplication1_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "password123"
+}
+
+###
+
+@your_jwt_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzQxNDA3NDA5LCJleHAiOjE3NDE0MTEwMDksImlhdCI6MTc0MTQwNzQwOX0.3dl8ZGybhB3yHnvaaUjW9cAj9lSDIe_mnMKgK_4znVk
+
+# Get all users
+GET {{WebApplication1_HostAddress}}/users
+Accept: application/json
+Authorization: Bearer {{your_jwt_token}}
+###
+
+# Get a specific user (ID = 1)
+GET {{WebApplication1_HostAddress}}/users?id=1
+Accept: application/json
+Authorization: Bearer {{your_jwt_token}}
+
+###
+
+# Add new user
+POST {{WebApplication1_HostAddress}}/users
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+{
+    "name": "New User",
+    "email": "newuser@example.com"
+}
+
+###
+
+# Update User (ID = 1)
+PUT {{WebApplication1_HostAddress}}/users/1
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+{
+    "name": "Updated User",
+    "email": "updateduser@example.com"
+}
+
+###
+
+# Deleting a User (ID = 1)
+DELETE {{WebApplication1_HostAddress}}/users/1
+Authorization: Bearer {{your_jwt_token}}
+
+###
+
+# Get a specific user (ID = 199，May not exist)
+GET {{WebApplication1_HostAddress}}/users?id=199
+Accept: application/json
+Authorization: Bearer {{your_jwt_token}}
+
+###
+
+# Attempt to add an invalid user (Empty name and invalid Email)
+POST {{WebApplication1_HostAddress}}/users
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+{
+    "name": "",
+    "email": "invalid-email"
+}
+
+###
+
+# Attempt to update a nonexistent user (ID = 999)
+PUT {{WebApplication1_HostAddress}}/users/999
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+{
+    "name": "Updated User",
+    "email": "updateduser@example.com"
+}
+
+###
+
+# Trying to update user (ID = 1) but providing an invalid Email
+PUT {{WebApplication1_HostAddress}}/users/1
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+{
+    "name": "Updated User",
+    "email": "invalid-email"
+}
+
+###
+
+# Trying to delete a non-existent user (ID = 999)
+DELETE {{WebApplication1_HostAddress}}/users/999
+Authorization: Bearer {{your_jwt_token}}
+
+###
+
+# Attempting to access the API using an invalid JWT token
+GET {{WebApplication1_HostAddress}}/users
+Accept: application/json
+Authorization: Bearer invalid_token_string
+
+###
+
+# Try accessing the API without providing a JWT token
+GET {{WebApplication1_HostAddress}}/users
+Accept: application/json
+
+###
+
+# Sending invalid JSON to trigger a server error
+PUT {{WebApplication1_HostAddress}}/users/1
+Authorization: Bearer {{your_jwt_token}}
+Content-Type: application/json
+
+INVALID_JSON_PAYLOAD
+
+###
